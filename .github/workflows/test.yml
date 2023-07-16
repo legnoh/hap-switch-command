@@ -19,6 +19,6 @@ jobs:
         with:
           go-version: stable
       - name: Run GoReleaser Build
-        uses: goreleaser/goreleaser-action@v2
+        uses: goreleaser/goreleaser-action@v4
         with:
           args: build --snapshot
