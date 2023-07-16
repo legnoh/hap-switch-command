@@ -1,0 +1,45 @@
+#=======================
+# Common Settings
+#=======================
+
+## DeviceName Setting(default: hap-switch-command)
+# name: hap-switch-command
+
+## HomeKit Pin Code(default: 12344321)
+# pin: "12344321" # should be string
+
+
+#=======================
+# Each Switches Settings
+#=======================
+switches:
+
+- 
+  ## Metadata for switch.
+  ## name is required, other is option.
+  meta:
+    name: SampleSwitch
+    
+    ## Below settings are option.
+    ## Please feel free like to setting.
+
+    # manufacturer: Hello World Corp.
+    # serialnumber: A01010101
+    # model: A123XYZ
+    # firmware: v1.0.0
+
+  ## Execute command settings. on&off both setting are allowed.
+  command:
+    on:
+      path: /bin/echo
+      args:
+      - switch on
+    off:
+      path: /bin/echo
+      # args:
+      # - switch off
+
+## If you want several switch, please add similar bullet.
+# - meta:
+#     name: DeviceB
+# ...

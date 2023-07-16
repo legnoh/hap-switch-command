@@ -1,0 +1,29 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "serve",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "args": ["serve", "--debug", "-c", "config.yml", "-f", "db"],
+        },
+        {
+            "name": "init",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "args": ["init", "--debug", "-c", "config.yml", "-f", "db"],
+        },
+        {
+            "name": "version",
+            "type": "go",
+            "request": "launch",
+            "mode": "auto",
+            "program": "main.go",
+            "args": ["-v"],
+        },
+    ]
+}
