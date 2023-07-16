@@ -1,0 +1,29 @@
+name: test
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - ".github/**"
+      - ".vscode/**"
+      - ".gitignore"
+      - ".goreleaser.yml"
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  goreleaser:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: stable
+      - name: Run GoReleaser Build
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          args: build --snapshot
