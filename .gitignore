@@ -52,5 +52,3 @@ vendor/
 db
 config.yml
 dist
-*.pem
-gh_ssh_key

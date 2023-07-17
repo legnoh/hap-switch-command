@@ -35,6 +35,5 @@ jobs:
         with:
           args: release --clean
         env:
-          GITHUB_SSH_KEY: ${{ github.workspace }}/gh_ssh_key
           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
           GITHUB_TOKEN: ${{ secrets.DEPLOYABLE_GITHUB_TOKEN }}
