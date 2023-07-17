@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"os/signal"
+	"regexp"
 	"syscall"
 
 	"github.com/brutella/hap"
@@ -54,6 +55,9 @@ func preStartServer(cmd *cobra.Command, args []string) {
 	if err := defaults.Set(&conf); err != nil {
 		log.Fatal(err)
 	}
+	if !regexp.MustCompile(`^[0-9]{8}$`).MatchString(conf.Pin) {
+		log.Fatalf("Your PinCode(%s) is invalid format. Please fix to 8-digit code(e.g. 12344321)", conf.Pin)
+	}
 }
 
 func startServer(cmd *cobra.Command, args []string) {
@@ -82,6 +86,7 @@ func startServer(cmd *cobra.Command, args []string) {
 	if err != nil {
 		log.Fatalf("Error: %s", err)
 	}
+	server.Pin = conf.Pin
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt)
