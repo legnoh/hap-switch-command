@@ -1,8 +1,10 @@
 package cmd
 
 import (
+	"bytes"
 	"context"
 	"os"
+	"os/exec"
 	"os/signal"
 	"syscall"
 
@@ -64,15 +66,16 @@ func startServer(cmd *cobra.Command, args []string) {
 	for _, v := range conf.Switches {
 		a := accessory.NewSwitch(v.Meta)
 		a.Switch.On.OnValueRemoteUpdate(func(on bool) {
+			var targetCmd Cmd
+
 			if on {
 				log.Info("Switch state changed: on")
-				// TBD
-				// exec.Command(v.Command.On.Path, v.Command.On.Args...)
+				targetCmd = v.Command.On
 			} else {
 				log.Info("Switch state changed: off")
-				// TBD
-				// exec.Command(v.Command.On.Path, v.Command.On.Args...)
+				targetCmd = v.Command.Off
 			}
+			execCommand(targetCmd)
 		})
 		switches = append(switches, a.A)
 	}
@@ -100,4 +103,25 @@ func startServer(cmd *cobra.Command, args []string) {
 	log.Debugf("Config File: %s", cfgFile)
 	log.Debugf(" Store Path: %s", fsStoreDirectory)
 	server.ListenAndServe(ctx)
+}
+
+func execCommand(cmd Cmd) {
+	var stdout, stderr bytes.Buffer
+
+	command := exec.Command(cmd.Path, cmd.Args...)
+	log.Debugf("Command: %s", command)
+	command.Stdout = &stdout
+	command.Stderr = &stderr
+
+	if err := command.Run(); err != nil {
+		log.Errorf("Result: Failed: %s", err)
+	} else {
+		log.Info("Result: Success")
+	}
+	if stdoutString := stdout.String(); stdoutString != "" {
+		log.Debugf("[stdout]: %s", stdoutString)
+	}
+	if stderrString := stderr.String(); stderrString != "" {
+		log.Errorf("[stderr]: %s", stderrString)
+	}
 }
