@@ -66,16 +66,13 @@ func startServer(cmd *cobra.Command, args []string) {
 	for _, v := range conf.Switches {
 		a := accessory.NewSwitch(v.Meta)
 		a.Switch.On.OnValueRemoteUpdate(func(on bool) {
-			var targetCmd Cmd
-
 			if on {
 				log.Info("Switch state changed: on")
-				targetCmd = v.Command.On
+				execCommand(v.Command.On)
 			} else {
 				log.Info("Switch state changed: off")
-				targetCmd = v.Command.Off
+				execCommand(v.Command.Off)
 			}
-			execCommand(targetCmd)
 		})
 		switches = append(switches, a.A)
 	}
