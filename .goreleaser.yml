@@ -1,9 +1,11 @@
 before:
   hooks:
     - go mod tidy
+
 builds:
   - ldflags:
-      - -s -w -X github.com/{{.Env.GITHUB_REPOSITORY_OWNER}}/{{.ProjectName}}/cmd.version={{.Version}}
+      - -s -w -X github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}/cmd.version={{ .Version }}
+
 changelog:
   sort: asc
   filters:
@@ -13,27 +15,62 @@ changelog:
 
 dockers:
   - image_templates:
-      - "ghcr.io/{{.Env.GITHUB_REPOSITORY_OWNER}}/{{.ProjectName}}:{{.Version}}-amd64"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Version }}-amd64"
     goarch: amd64
     build_flag_templates:
       - "--pull"
       - "--platform=linux/amd64"
-      - "--build-arg=OS=linux"
-      - "--build-arg=ARCH=amd64_v1"
+      - "--build-arg=package_name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.description=\"Release Note: https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}/releases/tag/{{ .Version }}\""
   - image_templates:
-      - "ghcr.io/{{.Env.GITHUB_REPOSITORY_OWNER}}/{{.ProjectName}}:{{.Version}}-arm64v8"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Version }}-arm64v8"
     goarch: arm64
     build_flag_templates:
       - "--pull"
       - "--platform=linux/arm64/v8"
-      - "--build-arg=OS=linux"
-      - "--build-arg=ARCH=arm64"
+      - "--build-arg=package_name={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.created={{ .Date }}"
+      - "--label=org.opencontainers.image.title={{ .ProjectName }}"
+      - "--label=org.opencontainers.image.revision={{ .FullCommit }}"
+      - "--label=org.opencontainers.image.version={{ .Version }}"
+      - "--label=org.opencontainers.image.description=\"Release Note: https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}/releases/tag/{{ .Version }}\""
 docker_manifests:
-  - name_template: "ghcr.io/{{.Env.GITHUB_REPOSITORY_OWNER}}/{{.ProjectName}}:{{.Version}}"
+  - name_template: "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Version }}"
     image_templates:
-      - "ghcr.io/{{.Env.GITHUB_REPOSITORY_OWNER}}/{{.ProjectName}}:{{.Version}}-amd64"
-      - "ghcr.io/{{.Env.GITHUB_REPOSITORY_OWNER}}/{{.ProjectName}}:{{.Version}}-arm64v8"
-  - name_template: "ghcr.io/{{.Env.GITHUB_REPOSITORY_OWNER}}/{{.ProjectName}}:latest"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Version }}-amd64"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Version }}-arm64v8"
+  - name_template: "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}:latest"
     image_templates:
-      - "ghcr.io/{{.Env.GITHUB_REPOSITORY_OWNER}}/{{.ProjectName}}:{{.Version}}-amd64"
-      - "ghcr.io/{{.Env.GITHUB_REPOSITORY_OWNER}}/{{.ProjectName}}:{{.Version}}-arm64v8"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Version }}-amd64"
+      - "ghcr.io/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}:{{ .Version }}-arm64v8"
+
+brews:
+  - commit_author:
+      name: goreleaserbot
+      email: bot@goreleaser.com
+    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{.Tag}}"
+    folder: Formula
+    caveats: |
+        Please check usage at README:
+            https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}/blob/main/README.md
+    homepage: "https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}"
+    description: "This app provides homekit virtual switch devices executing local commands."
+    license: "MIT"
+    skip_upload: auto
+    service: |
+      run [opt_bin/"{{ .ProjectName }}", "serve"]
+      keep_alive true
+      log_path var/"log/{{ .ProjectName }}.log"
+      error_log_path var/"log/{{ .ProjectName }}.log"
+    test: |
+      system "#{bin}/{{ .ProjectName }} --help"
+    repository:
+      owner: "{{ .Env.GITHUB_REPOSITORY_OWNER }}"
+      name: "homebrew-etc"
+      git:
+        url: "ssh://git@github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/homebrew-etc.git"
+        private_key: "{{ .Env.GITHUB_SSH_KEY }}"

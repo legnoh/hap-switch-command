@@ -1,8 +1,9 @@
-name: tag
+name: 02. Bump & Tag
 
 on:
   workflow_run:
-    workflows: [test]
+    workflows:
+      - 01. Build & Test
     types:
       - completed
   workflow_dispatch:

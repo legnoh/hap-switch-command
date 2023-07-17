@@ -1,9 +1,9 @@
 FROM gcr.io/distroless/static
 
-ENV PROJECT_NAME=hap-switch-command
-ENTRYPOINT ["/hap-switch-command"]
+ARG package_name
+ENV PKGNAME=${package_name}
 
-ARG OS
-ARG ARCH
-COPY ${PROJECT_NAME} /${PROJECT_NAME}
+COPY ${PKGNAME} /${PKGNAME}
+
+ENTRYPOINT [ "/$PKGNAME" ]
 CMD [ "serve" ]

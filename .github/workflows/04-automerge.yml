@@ -1,4 +1,4 @@
-name: 'Merge Dependencies'
+name: 04. Auto Merge Dependencies PR
 
 on: 
   pull_request_target:
