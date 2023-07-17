@@ -1,9 +1,9 @@
-FROM gcr.io/distroless/static
+FROM alpine
 
 ARG package_name
 ENV PKGNAME=${package_name}
 
 COPY ${PKGNAME} /${PKGNAME}
 
-ENTRYPOINT [ "/$PKGNAME" ]
+ENTRYPOINT [ "/hap-switch-command" ]
 CMD [ "serve" ]

@@ -59,7 +59,7 @@ brews:
             https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}/blob/main/README.md
     homepage: "https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}"
     description: "This app provides homekit virtual switch devices executing local commands."
-    license: "MIT"
+    license: MIT
     skip_upload: auto
     service: |
       run [opt_bin/"{{ .ProjectName }}", "serve"]
@@ -70,7 +70,5 @@ brews:
       system "#{bin}/{{ .ProjectName }} --help"
     repository:
       owner: "{{ .Env.GITHUB_REPOSITORY_OWNER }}"
-      name: "homebrew-etc"
-      git:
-        url: "ssh://git@github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/homebrew-etc.git"
-        private_key: "{{ .Env.GITHUB_SSH_KEY }}"
+      name: homebrew-etc
+      branch: main

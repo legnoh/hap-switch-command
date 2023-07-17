@@ -3,11 +3,6 @@ name: 03. Publish Artifacts
 on:
   push:
     tags: ["*"]
-  workflow_run:
-    workflows:
-      - 02. Bump & Tag
-    types:
-      - completed
     
 permissions:
   contents: write
@@ -16,7 +11,6 @@ jobs:
   goreleaser:
     permissions: write-all
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' }} || ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -36,17 +30,11 @@ jobs:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: "Store Deploy Key in local file"
-        # FYI: https://github.com/goreleaser/goreleaser-action/issues/326#issuecomment-1048899508
-        run: |
-          echo '${{ secrets.GH_HOMEBREW_DEPLOY_KEY }}' | base64 -d > '${{ github.workspace }}/gh_ssh_key'
-          chmod 600 '${{ github.workspace }}/gh_ssh_key'
-          head -n 1 '${{ github.workspace }}/gh_ssh_key'
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v4
         with:
           args: release --clean
         env:
-          GITHUB_SSH_KEY: '${{ github.workspace }}/gh_ssh_key'
+          GITHUB_SSH_KEY: ${{ github.workspace }}/gh_ssh_key
           GITHUB_REPOSITORY_OWNER: ${{ github.repository_owner }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.DEPLOYABLE_GITHUB_TOKEN }}
