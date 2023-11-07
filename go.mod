@@ -3,7 +3,7 @@ module github.com/legnoh/hap-switch-command
 go 1.20
 
 require (
-	github.com/brutella/hap v0.0.27
+	github.com/brutella/hap v0.0.28
 	github.com/creasty/defaults v1.7.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.8.0
@@ -11,7 +11,7 @@ require (
 )
 
 require (
-	github.com/brutella/dnssd v1.2.9 // indirect
+	github.com/brutella/dnssd v1.2.10 // indirect
 	github.com/fsnotify/fsnotify v1.6.0 // indirect
 	github.com/go-chi/chi v1.5.4 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
