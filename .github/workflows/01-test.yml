@@ -26,4 +26,5 @@ jobs:
       - name: Run GoReleaser Build
         uses: goreleaser/goreleaser-action@v6
         with:
+          version: "~> v2"
           args: build --snapshot
