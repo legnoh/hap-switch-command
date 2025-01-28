@@ -31,8 +31,8 @@ jobs:
     if: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      packages: write
+      contents: write # for tagging
+      packages: write # for docker push
     steps:
 
       - name: Checkout repository
