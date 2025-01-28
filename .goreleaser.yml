@@ -33,7 +33,7 @@ dockers:
     goarch: arm64
     build_flag_templates:
       - "--pull"
-      - "--platform=linux/arm64/v8"
+      - "--platform=linux/arm64"
       - "--build-arg=package_name={{ .ProjectName }}"
       - "--label=org.opencontainers.image.created={{ .Date }}"
       - "--label=org.opencontainers.image.title={{ .ProjectName }}"
@@ -60,7 +60,8 @@ brews:
         Please check usage at README:
             https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}/blob/main/README.md
     homepage: "https://github.com/{{ .Env.GITHUB_REPOSITORY_OWNER }}/{{ .ProjectName }}"
-    description: "This app provides homekit virtual switch devices executing local commands."
+    description: |
+      {{ .Env.DESCRIPTION }}
     license: MIT
     skip_upload: auto
     service: |
@@ -72,5 +73,5 @@ brews:
       system "#{bin}/{{ .ProjectName }} --help"
     repository:
       owner: "{{ .Env.GITHUB_REPOSITORY_OWNER }}"
-      name: homebrew-etc
+      name: "{{ .Env.HOMEBREW_REPO_NAME }}"
       branch: main
