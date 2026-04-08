@@ -1,6 +1,6 @@
 module github.com/legnoh/hap-switch-command
 
-go 1.26.1
+go 1.26.2
 
 require (
 	github.com/brutella/hap v0.0.35
