@@ -4,7 +4,7 @@ go 1.27.1
 
 require (
 	github.com/brutella/hap v0.0.35
-	github.com/creasty/defaults v1.8.0
+	github.com/creasty/defaults v1.9.0
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/viper v1.21.0
